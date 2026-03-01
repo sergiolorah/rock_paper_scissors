@@ -2,6 +2,20 @@
 use math.random then round the number to 2 digits
 then use conditionals between 0-0.33 0.34-0.66 0.67-1*/
 
+const rockButton = document.createElement('button');
+rockButton.textContent = 'Rock';
+const paperButton = document.createElement('button');
+paperButton.textContent = 'Paper';
+const scissorButton = document.createElement('button');
+scissorButton.textContent = 'Scissors';
+const results = document.createElement('p');
+
+const divButtons = document.querySelector('.buttons');
+const divResults = document.querySelector('.results');
+divButtons.appendChild(rockButton);
+divButtons.appendChild(paperButton);
+divButtons.appendChild(scissorButton);
+divResults.appendChild(results)
 
 
 function getComputerChoice(){
@@ -16,62 +30,83 @@ function getComputerChoice(){
   }
 }
 
-/* Write a function that asks the user for a choice and stores it in a variable*/
-
-function getHumanChoice(){
-  let choice = prompt("Choose rock, paper or scissors:");
-  return choice.toLowerCase();
-}
-
 /* Write a function that plays 5 rounds and keep track of the scores*/
 function playGame(){
   /*keep tracking of the scores with 2 variables*/
   let computerScore = 0;
   let humanScore = 0;
+
+  const buttons = document.querySelectorAll('button');
+  buttons.forEach(button => {
+  button.addEventListener('click',() => {
+    const humanChoice = button.textContent.toLowerCase();
+    divResults.innerHTML += '<p>' + (playRound(getComputerChoice(),humanChoice)) + '</p>';
+    divResults.innerHTML += '<p> Computer: ' + computerScore + ' You: ' + humanScore + '</p>';
+    checkWinner();
+  })
+  });
+
   /* Write a function with humanchoice and computerchoice as arguments and declare a winner, adding the score and show a message*/
   function playRound(computerchoice , humanchoice){
-    console.log('Computer choice: ' + computerchoice);
-    console.log('Your choice: ' + humanchoice);
+    let score = '<p>Computer choice: ' + computerchoice + '</p><p>Your choice:' + humanchoice + '</p>'
     
     if (computerchoice === 'rock'){
       switch (humanchoice) {
         case 'paper':
           humanScore++;
-          return 'You Win! paper beats rock.';
+          score += 'You Win! paper beats rock.';
+          return score;
         case 'scissors':
           computerScore++;
-          return 'You Lose! rock beats scissors';
+          score += 'You Lose! rock beats scissors';
+          return score;
         case 'rock':
-          return "It's a tie!"
+          score += "It's a tie!"
+          return score;
       }
     } else if (computerchoice === 'paper'){
         switch (humanchoice) {
           case 'rock':
             computerScore++;
-            return 'You Lose! paper beats rock.';
+            score += 'You Lose! paper beats rock.';
+            return score;
           case 'scissors':
             humanScore++;
-            return 'You Win! scissors beats paper';
+            score += 'You Win! scissors beats paper';
+            return score;
           case 'paper':
-            return "It's a tie!"
+            score += "It's a tie!"
+            return score;
       }
     } else{
         switch (humanchoice) {
           case 'rock':
             humanScore++;
-            return 'You Win! rock beats scissors.';
+            score += 'You Win! rock beats scissors.';
+            return score;
           case 'paper':
             computerScore++;
-            return 'You Lose! scissors beats paper';
+            score += 'You Lose! scissors beats paper';
+            return score;
           case 'scissors':
-            return "It's a tie!"
+            score += "It's a tie!"
+            return score;
       }
     }
   }
 
-  for (let i = 1; i < 6; i++) {
-    console.log(playRound(getComputerChoice(),getHumanChoice()));
-    console.log(`Round ${i} Your score: ${humanScore} Computer score: ${computerScore}`);
+  function checkWinner(){
+    if(computerScore == 5){
+      divResults.innerHTML = '';
+      divResults.innerHTML += '<h1>You Lose!</h1>';
+      computerScore = 0;
+      humanScore = 0;
+    }else if (humanScore == 5) {
+      divResults.innerHTML = '';
+      divResults.innerHTML += '<h1>You Win!</h1>';
+      computerScore = 0;
+      humanScore = 0;
+    }
   }
 
 }
